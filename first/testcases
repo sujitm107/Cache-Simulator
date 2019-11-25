@@ -1,0 +1,124 @@
+Grading the content of pa4.
+first  found!
+Grading file first
+gcc -Wall -Werror -lm -fsanitize=address -std=c11 first.c -o first
+
+executing: ./first 512 16 fifo direct 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_1.txt
+one_1.txt is not correct
+
+executing: ./first 512 16 fifo direct 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_2.txt
+one_2.txt is not correct
+
+executing: ./first 512 16 fifo assoc:4 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_3.txt
+one_3.txt is not correct
+
+executing: ./first 512 8 fifo assoc:8 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_4.txt
+one_4.txt is not correct
+
+executing: ./first 1024 1 fifo assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_5.txt
+one_5.txt is not correct
+
+executing: ./first 512 4 fifo assoc:2 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_6.txt
+one_6.txt is not correct
+
+executing: ./first 128 32 fifo assoc 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_7.txt
+one_7.txt is not correct
+
+executing: ./first 512 32 fifo assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_8.txt
+one_8.txt is not correct
+
+executing: ./first 512 4 lru assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_9.txt
+one_9.txt is not correct
+
+executing: ./first 1024 2 lru assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace1.txt > one_a.txt
+one_a.txt is not correct
+
+executing: ./first 512 16 fifo direct 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_1.txt
+two_1.txt is not correct
+
+executing: ./first 512 16 fifo direct 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_2.txt
+two_2.txt is not correct
+
+executing: ./first 512 16 fifo assoc:4 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_3.txt
+two_3.txt is not correct
+
+executing: ./first 512 8 fifo assoc:8 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_4.txt
+two_4.txt is not correct
+
+executing: ./first 1024 1 fifo assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_5.txt
+two_5.txt is not correct
+
+executing: ./first 512 4 fifo assoc:2 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_6.txt
+two_6.txt is not correct
+
+executing: ./first 128 32 fifo assoc 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_7.txt
+two_7.txt is not correct
+
+executing: ./first 512 32 fifo assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_8.txt
+two_8.txt is not correct
+
+executing: ./first 512 4 lru assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_9.txt
+two_9.txt is not correct
+
+executing: ./first 1024 2 lru assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace2.txt > two_a.txt
+two_a.txt is not correct
+
+executing: ./first 1024 2 lru assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr.a.txt
+thr.a.txt is not correct
+
+executing: ./first 512 16 fifo direct 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_1.txt
+thr_1.txt is not correct
+
+executing: ./first 512 16 fifo direct 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_2.txt
+thr_2.txt is not correct
+
+executing: ./first 512 16 fifo assoc:4 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_3.txt
+thr_3.txt is not correct
+
+executing: ./first 512 8 fifo assoc:8 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_4.txt
+thr_4.txt is not correct
+
+executing: ./first 1024 1 fifo assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_5.txt
+thr_5.txt is not correct
+
+executing: ./first 512 4 fifo assoc:2 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_6.txt
+thr_6.txt is not correct
+
+executing: ./first 128 32 fifo assoc 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_7.txt
+thr_7.txt is not correct
+
+executing: ./first 512 32 fifo assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_8.txt
+thr_8.txt is not correct
+
+executing: ./first 512 4 lru assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace3.txt > thr_9.txt
+thr_9.txt is not correct
+
+executing: ./first 512 16 fifo direct 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_1.txt
+fou_1.txt is not correct
+
+executing: ./first 512 16 fifo direct 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_2.txt
+fou_2.txt is not correct
+
+executing: ./first 512 16 fifo assoc:4 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_3.txt
+fou_3.txt is not correct
+
+executing: ./first 512 8 fifo assoc:8 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_4.txt
+fou_4.txt is not correct
+
+executing: ./first 1024 1 fifo assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_5.txt
+fou_5.txt is not correct
+
+executing: ./first 512 4 fifo assoc:2 1 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_6.txt
+fou_6.txt is not correct
+
+executing: ./first 128 32 fifo assoc 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_7.txt
+fou_7.txt is not correct
+
+executing: ./first 512 32 fifo assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_8.txt
+fou_8.txt is not correct
+
+executing: ./first 512 4 lru assoc:2 2 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_9.txt
+fou_9.txt is not correct
+
+executing: ./first 1024 2 lru assoc 4 /ilab/users/ssm189/Desktop/CS211/pa4_autograder/testcases/first/input/trace4.txt > fou_a.txt
+fou_a.txt is not correct
