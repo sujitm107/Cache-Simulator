@@ -86,12 +86,12 @@ void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity)
 
 }
 
-
+//START OF MAIN
 int main(int argc, char** argv){
 
 	int cache_size = atoi(argv[1]);
 	int block_size = atoi(argv[2]);
-	//char* cache_polity = argv[3];
+	char* cache_policy = argv[3];
 	int associativity = 1;
 	if (strcmp(argv[4],"direct") == 0){	
 		associativity = 1;
@@ -140,6 +140,7 @@ int main(int argc, char** argv){
 	// printf("Number of Sets: %d\n", num_sets);
 	// printf("Prefetch Size: %d\n", prefetch_size);
 	// printf("Associativity: %d\n", associativity);
+	printf("%s\n", cache_policy);
 
 //ALLOCATING CACHE
 	for(int k = 0; k<2; k++){
