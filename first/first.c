@@ -1,40 +1,86 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 //./first <cache size><block size><cache policy><associativity><prefetch size><trace file>
 struct cacheBlock{
 
-	unsigned int valid;
+	int valid;
 	unsigned long int tag;
 	unsigned int time;
 	
 };
 
-int search_cache(unsigned long long address, int mask, int set_index_bits, int associativity, int offset_bits, struct cacheBlock** cache);
+int checkHit(struct cacheBlock** set, unsigned long tag, int associativity);
+void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity);
+unsigned int getMaxTime(struct cacheBlock** set, int associativity);
+//void printArray(struct cacheBlock** cache, int num_sets, int associativity);
 
-int search_cache(unsigned long long address, int mask, int set_index_bits, int offset_bits, struct cacheBlock** cache){
-	unsigned int set_index = (address >> offset_bits) & mask;
-	unsigned long tag = (address >> offset_bits) >> set_index_bits;
+unsigned int getMaxTime(struct cacheBlock** set, int associativity){
+	unsigned int maxTime = 0;
+	for(int i = 0; i<associativity; i++){
+		if(set[i]->valid == 1){
 
-	//printf("tag: %lu,  set Index: %u\n", tag, set_index);
-
-	int b = 0;
-	while(b < associativity){
-		if(cache[set_index][b]->valid != 1){
-			break;
+			if(maxTime < set[i]->time){
+				maxTime = set[i]->time;
+			}
 		}
-		b++;
 	}
 
-	if(cache[set_index][b]->tag != tag){
-		cache[set_index][b]->tag = tag;
-		cache[set_index][b]->valid = 1;
-		return -1;
-	} else{
-		return 1;
+	return maxTime;
+}
+
+int checkHit(struct cacheBlock** set, unsigned long tag, int associativity){
+	//set[0]->tag = tag;
+	//printf("%lu\n", set[0]->tag);
+
+	for(int i = 0; i<associativity; i++){
+		printf("set: %lu, tagCompared: %lu ", set[i]->tag, tag);
+			if(set[i]->valid != 1){
+				return 0;
+			}
+
+			if(set[i]->tag == tag){
+				return 1;
+			}
 	}
 
 	return 0;
+}
+
+void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity){
+
+	struct cacheBlock* temp = malloc(sizeof(struct cacheBlock));
+	temp->tag = tag;
+	unsigned int time = getMaxTime(set, associativity); //returns the highest time
+	temp->time = time+1;
+
+	int i = 0;
+	unsigned int minTime = 10000000;
+	int minIndex = 0;
+
+	for(i = 0; i<associativity; i++){
+		if(set[i]->valid != 1){
+			set[i] = temp;
+			set[i]->valid = 1;
+			return;
+		}
+		if(minTime > set[i]->time){
+			minTime = set[i]->time;
+			minIndex = i;
+		}
+	}
+
+//LAST RESORT
+	//set[0] = temp;
+	//printf("putting in %lu\n", tag);
+
+//FULL
+	if(i == associativity){ //returns an index
+		set[minIndex] = temp;
+		temp->valid = 1;
+	}
+
 }
 
 
@@ -48,7 +94,15 @@ int main(int argc, char** argv){
 	int cache_size = atoi(argv[1]);
 	int block_size = atoi(argv[2]);
 	//char* cache_polity = argv[3];
-	int associativity = 1; //hardcoding to one bc for direct associativity is 1
+	int associativity = 1;
+	if (strcmp(argv[4],"direct") == 0){	
+		associativity = 1;
+	}else if(strcmp(argv[4], "assoc") == 0){
+		associativity = cache_size/block_size;
+	}else{
+		associativity = argv[4][6] - '0';
+	}
+
 	int prefetch_size = atoi(argv[5]); 
 
 	int valid_inputs = 0;
@@ -62,7 +116,7 @@ int main(int argc, char** argv){
 	}
 	
 	if(valid_inputs < 2){
-		printf("error\n")
+		printf("error\n");
 		return 0;
 	}
 
@@ -79,62 +133,84 @@ int main(int argc, char** argv){
 	printf("Tag Bits: %d\n", tag_bits);
 	printf("Number of Sets: %d\n", num_sets);
 	printf("Prefetch Size: %d\n", prefetch_size);
+	printf("Associativity: %d\n", associativity);
 
 //ALLOCATING CACHE
-	struct cacheBlock** cache = malloc(num_sets*sizeof(struct cacheBlock*));
-	for(int i = 0; i<num_sets; i++){
-		cache[i] = malloc(associativity*sizeof(struct cacheBlock));
-	}
+		struct cacheBlock*** cache = malloc(num_sets*sizeof(struct cacheBlock**));
 
-
-	FILE* fp = fopen(argv[6], "r");
-	unsigned long long int address;
-	char command;
-	while(fscanf(fp, "%c %llx\n", &command, &address) > 0){
-		if(command == '#'){
-			break;
+		for(int r = 0; r<num_sets; r++){
+			cache[r] = malloc(associativity*sizeof(struct cacheBlock*));
+				for(int i = 0; i<associativity; i++){
+					cache[r][i] = malloc(sizeof(struct cacheBlock));
+				}
 		}
-		if(command == 'W'){
-			num_writes += 1;
+
+		FILE* fp = fopen(argv[6], "r");
+		unsigned long long int address;
+		char command;
+		while(fscanf(fp, "%c %llx\n", &command, &address) > 0){
+			if(command == '#'){
+				break;
+			}
+
+			unsigned int set_index = (address >> offset_bits) & mask;
+			unsigned long tag = (address >> offset_bits) >> set_index_bits;
+
+			// if(command == 'W'){
+			// 	num_writes += 1;
+				
+			// }
+			printf("%d\n", set_index);
+			if(checkHit(cache[set_index], tag, associativity) == 1){
+				printf("hit\n");
+
+				num_cache_hits++;
+				if(command == 'W'){
+					num_writes++;
+				}
+			} else {
+				printf("miss\n");
+
+
+
+				writeToCache(cache[set_index], tag, associativity);
+				num_cache_misses++;
+				if(command == 'W'){
+					num_reads++;
+					num_writes++;
+				} else {
+					num_reads++;
+				}
+			}
+
 			
 		}
 
-		if(search_cache(address, mask, set_index_bits, offset_bits, cache) == 1){
-			num_cache_hits++;
-		} else{
-			num_cache_misses++;
-			num_reads++;
-			int p = 0;
-			 while(fscanf(fp, "%c %llx\n", &command, &address) > 0 || p < prefetch_size){
-
-
-			 }
-		}
-		
-	}
+		printf("no-prefetch\n");
+		printf("Memory reads: %d\n", num_reads);
+		printf("Memory writes: %d\n", num_writes);
+		printf("Cache hits: %d\n", num_cache_hits);
+		printf("Cache misses: %d\n", num_cache_misses);
 	
-	printf("no-prefetch\n");
-	printf("Memory reads: %d\n", num_reads);
-	printf("Memory writes: %d\n", num_writes);
-	printf("Cache hits: %d\n", num_cache_hits);
-	printf("Cache misses: %d\n", num_cache_misses);
 	
-	printf("with-prefetch\n");
-	printf("Memory reads: %d\n", 0);
-	printf("Memory writes: %d\n", 0);
-	printf("Cache hits: %d\n", 0);
-	printf("Cache misses: %d\n", 0);
+	// printf("with-prefetch\n");
+	// printf("Memory reads: %d\n", 0);
+	// printf("Memory writes: %d\n", 0);
+	// printf("Cache hits: %d\n", 0);
+	// printf("Cache misses: %d\n", 0);
+
+	//printArray(cache, num_sets, associativity);
 	
 	return 0;
 }
 
-void printArray(cacheBlock** cache, int num_sets, int associativity){
+// void printArray(struct cacheBlock** cache, int num_sets, int associativity){
 
-	for(int i = 0; i<num_sets; i++){
-		for(int j = 0; j<associativity; j++){
-			printf("Tag: %lu Valid: %d Time: %d\n", cache[i][j]->tag, cache[i][j]->valid; cache[i][j]->time);
-		}
-		printf("\n");
-	}
+// 	for(int i = 0; i<num_sets; i++){
+// 		for(int j = 0; j<associativity; j++){
+// 			printf("Tag: %lu Valid: %d Time: %u\n", cache[i]->tag, cache[i]->valid, cache[i]->time);
+// 		}
+// 		printf("\n");
+// 	}
 
-}
+// }
