@@ -56,7 +56,8 @@ void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity)
 	temp->time = time+1;
 
 	int i = 0;
-	unsigned int minTime = 1000000000;
+	unsigned int minTime = time;
+	printf("HUGE_VAL: %u\n", minTime);
 	int minIndex = 0;
 
 	for(i = 0; i<associativity; i++){
