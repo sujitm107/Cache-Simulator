@@ -88,6 +88,8 @@ void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity)
 		//printf("Inserted through replacement\n");
 	}
 
+	free(temp);
+
 }
 
 //START OF MAIN
@@ -184,11 +186,6 @@ int main(int argc, char** argv){
 			unsigned int set_index = (address >> offset_bits) & mask;
 			unsigned long tag = (address >> offset_bits) >> set_index_bits;
 
-			// if(command == 'W'){
-			// 	num_writes += 1;
-				
-			// }
-			//printf("%d\n", set_index);
 			if(k == 0){ //WOUT PREFETCH
 				if(checkHit(cache[set_index], tag, associativity, lru) == 1){
 					//printf("hit\n");
@@ -253,27 +250,21 @@ int main(int argc, char** argv){
 		printf("Cache hits: %d\n", num_cache_hits);
 		printf("Cache misses: %d\n", num_cache_misses);
 
-	}
-	
-	
-	// printf("with-prefetch\n");
-	// printf("Memory reads: %d\n", 0);
-	// printf("Memory writes: %d\n", 0);
-	// printf("Cache hits: %d\n", 0);
-	// printf("Cache misses: %d\n", 0);
+//FREEING MALLOC
+		for(int i = 0; i<num_sets; i++){
+			for(int j = 0; j<associativity; j++){
+				free(cache[i][j]);
+			}
+		}
 
-	//printArray(cache, num_sets, associativity);
+		for(int i=0; i < num_sets; i++){
+			free(cache[i]);
+		}
+
+		free(cache);
+
+
+	}
 	
 	return 0;
 }
-
-// void printArray(struct cacheBlock** cache, int num_sets, int associativity){
-
-// 	for(int i = 0; i<num_sets; i++){
-// 		for(int j = 0; j<associativity; j++){
-// 			printf("Tag: %lu Valid: %d Time: %u\n", cache[i]->tag, cache[i]->valid, cache[i]->time);
-// 		}
-// 		printf("\n");
-// 	}
-
-// }
