@@ -11,7 +11,7 @@ struct cacheBlock{
 	
 };
 
-int checkHit(struct cacheBlock** set, unsigned long tag, int associativity);
+int checkHit(struct cacheBlock** set, unsigned long tag, int associativity, int lru);
 void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity);
 unsigned int getMaxTime(struct cacheBlock** set, int associativity);
 //void printArray(struct cacheBlock** cache, int num_sets, int associativity);
@@ -30,7 +30,7 @@ unsigned int getMaxTime(struct cacheBlock** set, int associativity){
 	return maxTime;
 }
 
-int checkHit(struct cacheBlock** set, unsigned long tag, int associativity){
+int checkHit(struct cacheBlock** set, unsigned long tag, int associativity, int lru){
 	//set[0]->tag = tag;
 	//printf("%lu\n", set[0]->tag);
 
@@ -41,6 +41,10 @@ int checkHit(struct cacheBlock** set, unsigned long tag, int associativity){
 			}
 
 			if(set[i]->tag == tag){
+				if(lru == 1){
+					int maxTime = getMaxTime(set, associativity);
+					set[i]->time = maxTime+1;
+				}
 				return 1;
 			}
 	}
@@ -89,9 +93,14 @@ void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity)
 //START OF MAIN
 int main(int argc, char** argv){
 
+	int lru = 0;	
+
 	int cache_size = atoi(argv[1]);
 	int block_size = atoi(argv[2]);
 	char* cache_policy = argv[3];
+	if(strcmp(argv[3], "lru") == 0){
+		lru = 1;
+	}
 	int associativity = 1;
 	if (strcmp(argv[4],"direct") == 0){	
 		associativity = 1;
@@ -140,7 +149,7 @@ int main(int argc, char** argv){
 	// printf("Number of Sets: %d\n", num_sets);
 	// printf("Prefetch Size: %d\n", prefetch_size);
 	// printf("Associativity: %d\n", associativity);
-	printf("%s\n", cache_policy);
+	//printf("%s %d\n", cache_policy, lru);
 
 //ALLOCATING CACHE
 	for(int k = 0; k<2; k++){
@@ -175,7 +184,7 @@ int main(int argc, char** argv){
 			// }
 			//printf("%d\n", set_index);
 			if(k == 0){ //WOUT PREFETCH
-				if(checkHit(cache[set_index], tag, associativity) == 1){
+				if(checkHit(cache[set_index], tag, associativity, lru) == 1){
 					//printf("hit\n");
 
 					num_cache_hits++;
@@ -195,7 +204,7 @@ int main(int argc, char** argv){
 					}
 				}
 			 } else{ //PREFETCH
-				if(checkHit(cache[set_index], tag, associativity) == 1){
+				if(checkHit(cache[set_index], tag, associativity, lru) == 1){
 					num_cache_hits++;
 					if(command == 'W'){
 						num_writes++;
@@ -217,7 +226,7 @@ int main(int argc, char** argv){
 						//printf("%llx\n", prefetch_address);
 						set_index = (prefetch_address >> offset_bits) & mask;
 						tag = (prefetch_address >> offset_bits) >> set_index_bits;
-						if(checkHit(cache[set_index], tag, associativity) == 0){
+						if(checkHit(cache[set_index], tag, associativity, lru) == 0){
 							writeToCache(cache[set_index], tag, associativity);
 							num_reads++;
 						}

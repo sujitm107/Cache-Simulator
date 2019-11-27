@@ -1,0 +1,101 @@
+Extra credit files:
+
+one_9 -- gucci ./first 512 4 lru assoc:2 2
+no-prefetch
+Memory reads: 336
+Memory writes: 334
+Cache hits: 664
+Cache misses: 336
+with-prefetch
+Memory reads: 504
+Memory writes: 334
+Cache hits: 832
+Cache misses: 168
+
+one_A
+no-prefetch
+Memory reads: 336
+Memory writes: 334
+Cache hits: 664
+Cache misses: 336
+with-prefetch
+Memory reads: 840
+Memory writes: 334
+Cache hits: 832
+Cache misses: 168
+
+two_9 -- gucci ./first 512 4 lru assoc:2 2 trace2.txt
+no-prefetch
+Memory reads: 3275
+Memory writes: 2861
+Cache hits: 6725
+Cache misses: 3275
+with-prefetch
+Memory reads: 4913
+Memory writes: 2861
+Cache hits: 8353
+Cache misses: 1647
+
+two_A
+no-prefetch
+Memory reads: 3275
+Memory writes: 2861
+Cache hits: 6725
+Cache misses: 3275
+with-prefetch
+Memory reads: 8194
+Memory writes: 2861
+Cache hits: 8353
+Cache misses: 1647
+
+thr_9 -- wrong(prefetch) -- ./first 512 4 lru assoc:2 2 trace3.txt
+no-prefetch
+Memory reads: 280879
+Memory writes: 110022
+Cache hits: 448025
+Cache misses: 280879
+with-prefetch
+Memory reads: 569805 x too high
+Memory writes: 110022 
+Cache hits: 524919  x too low
+Cache misses: 203985 x too high
+
+
+thr_A -- wrong(prefetch) -- ./first 1024 2 lru assoc 4 trace3.txt
+no-prefetch
+Memory reads: 283987
+Memory writes: 110022
+Cache hits: 444917
+Cache misses: 283987
+with-prefetch
+Memory reads: 819242 x
+Memory writes: 110022 
+Cache hits: 558146 x too low
+Cache misses: 170758 x too high
+
+fou_9 -- wrong -- ./first 512 4 lru assoc:2 2
+no-prefetch
+Memory reads: 2405700
+Memory writes: 611377
+Cache hits: 3411794
+Cache misses: 2405700
+with-prefetch
+Memory reads: 4733262
+Memory writes: 611377
+Cache hits: 4111474
+Cache misses: 1706020
+
+fou_A -- wrong -- ./first 1024 2 lru assoc 4
+no-prefetch
+Memory reads: 2535468
+Memory writes: 611377
+Cache hits: 3282026
+Cache misses: 2535468
+with-prefetch
+Memory reads: 7150046
+Memory writes: 611377
+Cache hits: 4342984
+Cache misses: 1474510
+
+
+hypothesis: Eviction process
