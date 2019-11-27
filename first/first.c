@@ -88,7 +88,6 @@ void writeToCache(struct cacheBlock** set, unsigned long tag, int associativity)
 		//printf("Inserted through replacement\n");
 	}
 
-	free(temp);
 
 }
 
@@ -176,6 +175,11 @@ int main(int argc, char** argv){
 		}
 
 		FILE* fp = fopen(argv[6], "r");
+		if(fp == NULL){
+			printf("error\n");
+			return 0;
+		}
+
 		unsigned long long int address;
 		char command;
 		while(fscanf(fp, "%c %llx\n", &command, &address) > 0){
@@ -186,6 +190,7 @@ int main(int argc, char** argv){
 			unsigned int set_index = (address >> offset_bits) & mask;
 			unsigned long tag = (address >> offset_bits) >> set_index_bits;
 
+			//printf("%d\n", set_index);
 			if(k == 0){ //WOUT PREFETCH
 				if(checkHit(cache[set_index], tag, associativity, lru) == 1){
 					//printf("hit\n");
