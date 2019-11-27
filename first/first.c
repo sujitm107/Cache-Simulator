@@ -95,6 +95,11 @@ int main(int argc, char** argv){
 
 	int lru = 0;	
 
+	if(argc != 7){
+		printf("error\n");
+		return 0;
+	}
+
 	int cache_size = atoi(argv[1]);
 	int block_size = atoi(argv[2]);
 	char* cache_policy = argv[3];
@@ -113,6 +118,7 @@ int main(int argc, char** argv){
 				break;
 			}
 			if(i == associativity-1){
+				printf("error\n");
 				return 0;
 			}
 		}
