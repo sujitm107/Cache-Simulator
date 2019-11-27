@@ -98,7 +98,7 @@ int main(int argc, char** argv){
 	int cache_size = atoi(argv[1]);
 	int block_size = atoi(argv[2]);
 	char* cache_policy = argv[3];
-	if(strcmp(argv[3], "lru") == 0){
+	if(strcmp(cache_policy, "lru") == 0){
 		lru = 1;
 	}
 	int associativity = 1;
@@ -226,7 +226,7 @@ int main(int argc, char** argv){
 						//printf("%llx\n", prefetch_address);
 						set_index = (prefetch_address >> offset_bits) & mask;
 						tag = (prefetch_address >> offset_bits) >> set_index_bits;
-						if(checkHit(cache[set_index], tag, associativity, lru) == 0){
+						if(checkHit(cache[set_index], tag, associativity, 0) == 0){
 							writeToCache(cache[set_index], tag, associativity);
 							num_reads++;
 						}
